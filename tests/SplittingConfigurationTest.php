@@ -8,6 +8,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Qroques\ResilientData\SplittingConfiguration;
 
+/**
+ * @internal
+ */
 #[CoversClass(SplittingConfiguration::class)]
 class SplittingConfigurationTest extends TestCase
 {
@@ -15,6 +18,6 @@ class SplittingConfigurationTest extends TestCase
     {
         $splittingConfiguration = new SplittingConfiguration(5, 2);
         $this->assertSame(3, $splittingConfiguration->getMinimumNumberOfFragments());
-        $this->assertEquals([7, 11, 13, 14, 19, 21, 22, 25, 26, 28], $splittingConfiguration->getRepartitionKeys());
+        $this->assertEquals([0b111, 0b1011, 0b1101, 0b1110, 0b10011, 0b10101, 0b10110, 0b11001, 0b11010, 0b11100], $splittingConfiguration->getRepartitionKeys());
     }
 }

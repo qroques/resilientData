@@ -20,3 +20,36 @@ You have 4 associates, and you want to split a secret into 4 parts, so that each
 |E| |X| |X|
 |F| | |X|X|
 
+## Usage
+
+### Installation
+
+#### Composer
+
+```bash
+composer require qroques/resilient-data
+```
+
+> [!NOTE]
+> This library requires PHP 8.3 or later but does not require any other dependency.
+
+### Splitting data
+
+```php
+$resilientData = new Qroques\ResilientData\ResilientData(file_get_contents(__DIR__.'/data/lorem.txt'));
+// We want to split the data into 5 parts, and we want to be able to recover the data even with 2 parts missing
+$splittingConfiguration = new Qroques\ResilientData\SplittingConfiguration(5, 2);
+$splitter = new Qroques\ResilientData\Splitter();
+
+$fragments = $splitter->split($resilientData, $splittingConfiguration);
+```
+
+> [!WARNING]
+> Chunk of data are not encrypted. This mean that parts of the data can still be readable from the fragments.
+
+### Recovering data
+
+```php
+$assembler = new Qroques\ResilientData\Assembler();
+$resilientData = $splitter->assemble($fragments);
+```

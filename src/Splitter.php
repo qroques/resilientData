@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Qroques\ResilientData;
 
-class Splitter implements SplitterInterface
+class Splitter
 {
+    /**
+     * @return array<Fragment>
+     */
     public function split(
         ResilientData $resilientData,
         SplittingConfiguration $splittingConfiguration
