@@ -33,15 +33,14 @@ readonly class SplittingConfiguration
     public function getRepartitionKeys(): array
     {
         $matches = [];
+
         for ($i = 0; $i < 2 ** $this->numberOfFragments; ++$i) {
-            $binary = str_pad(base_convert((string) $i, 10, 2), $this->numberOfFragments, '0', STR_PAD_LEFT);
-
-            $numberOfOnes = substr_count($binary, '1');
-
-            $matches[$numberOfOnes][] = (int) base_convert((string) $binary, 2, 10);
+            if (substr_count(decbin($i), '1') === $this->acceptableLoss + 1) {
+                $matches[] = $i;
+            }
         }
 
-        return $matches[$this->acceptableLoss + 1];
+        return $matches;
     }
 
     public function getNumberOfChunks(): int

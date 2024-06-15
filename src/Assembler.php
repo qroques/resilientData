@@ -9,7 +9,10 @@ use Qroques\ResilientData\Exception\NotEnoughFragmentsException;
 
 class Assembler
 {
-    public function assemble(Fragment ...$fragments): ResilientData
+    /**
+     * @param array<Fragment> $fragments
+     */
+    public function assemble(array $fragments): ResilientData
     {
         if (0 === count($fragments)) {
             throw new \InvalidArgumentException('No fragments to assemble');
