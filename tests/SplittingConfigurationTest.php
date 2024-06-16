@@ -6,6 +6,7 @@ namespace tests\Qroques\ResilientData;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Qroques\ResilientData\DataChunkIdentifier;
 use Qroques\ResilientData\SplittingConfiguration;
 
 /**
@@ -18,6 +19,17 @@ class SplittingConfigurationTest extends TestCase
     {
         $splittingConfiguration = new SplittingConfiguration(5, 2);
         $this->assertSame(3, $splittingConfiguration->getMinimumNumberOfFragments());
-        $this->assertEquals([0b111, 0b1011, 0b1101, 0b1110, 0b10011, 0b10101, 0b10110, 0b11001, 0b11010, 0b11100], $splittingConfiguration->getRepartitionKeys());
+        $this->assertEquals([
+            new DataChunkIdentifier(0b111),
+            new DataChunkIdentifier(0b1011),
+            new DataChunkIdentifier(0b1101),
+            new DataChunkIdentifier(0b1110),
+            new DataChunkIdentifier(0b10011),
+            new DataChunkIdentifier(0b10101),
+            new DataChunkIdentifier(0b10110),
+            new DataChunkIdentifier(0b11001),
+            new DataChunkIdentifier(0b11010),
+            new DataChunkIdentifier(0b11100),
+        ], $splittingConfiguration->getDataChunkIdentifiers());
     }
 }

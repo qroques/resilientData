@@ -7,35 +7,33 @@ namespace Qroques\ResilientData;
 class Splitter
 {
     /**
-     * @return array<Fragment>
+     * @return Collection<Fragment>
      */
     public function split(
         ResilientData $resilientData,
         SplittingConfiguration $splittingConfiguration
-    ): array {
-        $fragments = [];
-        $numberOfChunks = $splittingConfiguration->getNumberOfChunks();
-        $manifest = new Manifest($resilientData->getHash(), $numberOfChunks, $splittingConfiguration);
-        $chunkSize = (int) ceil(strlen($resilientData->getBinaryData()) / $numberOfChunks);
+    ): iterable {
+        /** @var Collection<Fragment> */
+        $fragments = new Collection();
+        $manifest = new Manifest($resilientData->getHash(), $splittingConfiguration);
+        $chunkSize = (int) ceil(strlen($resilientData->getBinaryData()) / $splittingConfiguration->getNumberOfChunks());
 
         if ($chunkSize <= 1) {
             throw new \RuntimeException('The chunk size is too small to split the data');
         }
 
-        $chunkRepartitionKeys = $splittingConfiguration->getRepartitionKeys();
+        $dataChunkIdentifiers = $splittingConfiguration->getDataChunkIdentifiers();
         $data = str_split($resilientData->getBinaryData(), $chunkSize);
 
         for ($index = 0; $index < $splittingConfiguration->numberOfFragments; ++$index) {
-            $fragments[] = new Fragment($index, $manifest);
+            $fragments->add(new Fragment(new FragmentIdentifier($index), $manifest));
         }
 
         foreach ($data as $index => $chunk) {
-            $dataChunk = new DataChunk($chunkRepartitionKeys[$index], $chunk);
+            $dataChunk = new DataChunk($dataChunkIdentifiers[$index], $chunk);
 
-            foreach ($fragments as $fragment) {
-                if ($dataChunk->index & (2 ** $fragment->index)) {
-                    $fragment->addChunk($dataChunk);
-                }
+            foreach ($dataChunk->identifier->getRelatedFragmentIdentifiers() as $fragmentIdentifier) {
+                $fragments->get($fragmentIdentifier)->addDataChunk($dataChunk);
             }
         }
 

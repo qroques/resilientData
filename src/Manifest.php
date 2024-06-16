@@ -8,7 +8,6 @@ readonly class Manifest
 {
     public function __construct(
         public Hash $resilientDataHash,
-        public int $totalNumberOfChunks,
         public SplittingConfiguration $splittingConfiguration
     ) {}
 }
