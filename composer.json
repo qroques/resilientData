@@ -10,7 +10,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "test\\": "spec/"
+            "tests\\unit\\": "tests/unit",
+            "tests\\integration\\": "tests/integration"
         }
     },
     "authors": [

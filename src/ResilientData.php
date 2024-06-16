@@ -20,11 +20,17 @@ class ResilientData
 
     public function getBinaryData(): string
     {
-        return base64_encode(serialize($this->data));
+        $stringData = json_encode($this->data);
+
+        if (false === $stringData) {
+            throw new \RuntimeException('Failed to encode data to JSON: '.json_last_error_msg());
+        }
+
+        return base64_encode($stringData);
     }
 
     public static function fromBinaryData(string $data): self
     {
-        return new self(unserialize(base64_decode($data)));
+        return new self(json_decode(base64_decode($data)));
     }
 }

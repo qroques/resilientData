@@ -10,7 +10,7 @@ namespace Qroques\ResilientData;
 class Fragment implements Identifiable
 {
     /** @var Collection<DataChunk> */
-    private Collection $dataChunks;
+    public Collection $dataChunks;
 
     /**
      * @param array<DataChunk> $dataChunks

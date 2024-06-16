@@ -10,8 +10,11 @@
          failOnRisky="true"
          failOnWarning="true">
     <testsuites>
-        <testsuite name="default">
-            <directory>tests</directory>
+        <testsuite name="unit tests">
+            <directory>tests/unit</directory>
+        </testsuite>
+        <testsuite name="integration tests">
+            <directory>tests/integration</directory>
         </testsuite>
     </testsuites>
 

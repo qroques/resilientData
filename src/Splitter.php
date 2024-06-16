@@ -7,7 +7,7 @@ namespace Qroques\ResilientData;
 class Splitter
 {
     /**
-     * @return Collection<Fragment>
+     * @return array<Fragment>
      */
     public function split(
         ResilientData $resilientData,
@@ -37,6 +37,6 @@ class Splitter
             }
         }
 
-        return $fragments;
+        return iterator_to_array($fragments);
     }
 }

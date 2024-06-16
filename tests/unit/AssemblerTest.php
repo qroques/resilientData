@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace tests\Qroques\ResilientData;
+namespace tests\unit\Qroques\ResilientData;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -25,10 +25,10 @@ class AssemblerTest extends TestCase
     public function testAssemble(): void
     {
         $assembler = new Assembler();
-        $chunk3 = new DataChunk(new DataChunkIdentifier(3), 'czoxNToiVGh');
-        $chunk5 = new DataChunk(new DataChunkIdentifier(5), 'pcyBpcyBhIG');
-        $chunk6 = new DataChunk(new DataChunkIdentifier(6), 'RhdGEhIjs=');
-        $manifest = new Manifest(Hash::fromContent(base64_encode(serialize('This is a data!'))), new SplittingConfiguration(3, 1));
+        $chunk3 = new DataChunk(new DataChunkIdentifier(3), 'IlRoaXMg');
+        $chunk5 = new DataChunk(new DataChunkIdentifier(5), 'aXMgYSBk');
+        $chunk6 = new DataChunk(new DataChunkIdentifier(6), 'YXRhISI=');
+        $manifest = new Manifest(Hash::fromContent(base64_encode(json_encode('This is a data!'))), new SplittingConfiguration(3, 1));
 
         $fragment0 = new Fragment(new FragmentIdentifier(0), $manifest, [$chunk3, $chunk5]);
         $fragment1 = new Fragment(new FragmentIdentifier(1), $manifest, [$chunk3, $chunk6]);
@@ -50,10 +50,10 @@ class AssemblerTest extends TestCase
     public function testAssembleWithMissingData(): void
     {
         $assembler = new Assembler();
-        $chunk3 = new DataChunk(new DataChunkIdentifier(3), 'czoxNToiVGh');
-        $chunk5 = new DataChunk(new DataChunkIdentifier(5), 'pcyBpcyBhIG');
-        $chunk6 = new DataChunk(new DataChunkIdentifier(6), 'RhdGEhIjs=');
-        $manifest = new Manifest(Hash::fromContent(base64_encode(serialize('This is a data!'))), new SplittingConfiguration(3, 1));
+        $chunk3 = new DataChunk(new DataChunkIdentifier(3), 'IlRoaXMg');
+        $chunk5 = new DataChunk(new DataChunkIdentifier(5), 'aXMgYSBk');
+        $chunk6 = new DataChunk(new DataChunkIdentifier(6), 'YXRhISI=');
+        $manifest = new Manifest(Hash::fromContent(base64_encode(json_encode('This is a data!'))), new SplittingConfiguration(3, 1));
 
         $fragment0 = new Fragment(new FragmentIdentifier(0), $manifest, [$chunk3, $chunk5]);
         $fragment1 = new Fragment(new FragmentIdentifier(1), $manifest, [$chunk3, $chunk6]);
