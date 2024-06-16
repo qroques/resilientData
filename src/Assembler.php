@@ -14,20 +14,22 @@ class Assembler
      */
     public function assemble(array $fragments): ResilientData
     {
-        if (0 === count($fragments)) {
+        /** @var Collection<Fragment> */
+        $fragmentCollection = new Collection($fragments);
+        if (0 === $fragmentCollection->count()) {
             throw new \InvalidArgumentException('No fragments to assemble');
         }
 
         $manifest = $fragments[0]->manifest;
 
-        if (count($fragments) < $manifest->splittingConfiguration->getMinimumNumberOfFragments()) {
-            throw new NotEnoughFragmentsException(count($fragments), $manifest->splittingConfiguration->getMinimumNumberOfFragments());
+        if ($fragmentCollection->count() < $manifest->splittingConfiguration->getMinimumNumberOfFragments()) {
+            throw new NotEnoughFragmentsException($fragmentCollection->count(), $manifest->splittingConfiguration->getMinimumNumberOfFragments());
         }
 
         $data = '';
-        foreach ($manifest->splittingConfiguration->getRepartitionKeys() as $i) {
+        foreach ($manifest->splittingConfiguration->getDataChunkIdentifiers() as $i) {
             foreach ($fragments as $fragment) {
-                if ($fragment->hasChunk($i)) {
+                if ($fragment->hasDataChunk($i)) {
                     $data .= $fragment->getDataChunk($i)->data;
 
                     continue 2;
@@ -36,7 +38,7 @@ class Assembler
         }
         $resilientData = ResilientData::fromBinaryData($data);
 
-        if ($resilientData->getHash() !== $manifest->resilientDataHash) {
+        if (!$resilientData->getHash()->equals($manifest->resilientDataHash)) {
             throw new HashMismatchException($resilientData->getHash(), $manifest->resilientDataHash);
         }
 

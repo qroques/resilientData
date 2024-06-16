@@ -4,10 +4,18 @@ declare(strict_types=1);
 
 namespace Qroques\ResilientData;
 
-readonly class DataChunk
+/**
+ * @implements Identifiable<DataChunkIdentifier>
+ */
+readonly class DataChunk implements Identifiable
 {
     public function __construct(
-        public int $index,
+        public DataChunkIdentifier $identifier,
         public string $data
     ) {}
+
+    public function getIdentifier(): DataChunkIdentifier
+    {
+        return $this->identifier;
+    }
 }

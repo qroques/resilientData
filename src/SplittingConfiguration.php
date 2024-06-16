@@ -28,15 +28,15 @@ readonly class SplittingConfiguration
     }
 
     /**
-     * @return array<int>
+     * @return array<DataChunkIdentifier>
      */
-    public function getRepartitionKeys(): array
+    public function getDataChunkIdentifiers(): array
     {
         $matches = [];
 
         for ($i = 0; $i < 2 ** $this->numberOfFragments; ++$i) {
             if (substr_count(decbin($i), '1') === $this->acceptableLoss + 1) {
-                $matches[] = $i;
+                $matches[] = new DataChunkIdentifier($i);
             }
         }
 
@@ -45,6 +45,6 @@ readonly class SplittingConfiguration
 
     public function getNumberOfChunks(): int
     {
-        return count($this->getRepartitionKeys());
+        return count($this->getDataChunkIdentifiers());
     }
 }

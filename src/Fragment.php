@@ -4,37 +4,48 @@ declare(strict_types=1);
 
 namespace Qroques\ResilientData;
 
-class Fragment
+/**
+ * @implements Identifiable<FragmentIdentifier>
+ */
+class Fragment implements Identifiable
 {
+    /** @var Collection<DataChunk> */
+    private Collection $dataChunks;
+
     /**
      * @param array<DataChunk> $dataChunks
      */
     public function __construct(
-        public readonly int $index,
+        public readonly FragmentIdentifier $identifier,
         public readonly Manifest $manifest,
-        private array $dataChunks = []
-    ) {}
-
-    public function addChunk(DataChunk $dataChunk): void
-    {
-        $this->dataChunks[$dataChunk->index] = $dataChunk;
+        array $dataChunks = []
+    ) {
+        $this->dataChunks = new Collection($dataChunks);
     }
 
-    public function hasChunk(int $index): bool
+    public function getIdentifier(): FragmentIdentifier
     {
-        return (bool) ($this->dataChunks[$index] ?? false);
+        return $this->identifier;
     }
 
-    public function getDataChunk(int $index): DataChunk
+    public function addDataChunk(DataChunk $dataChunk): void
     {
-        return $this->dataChunks[$index] ?? throw new \InvalidArgumentException('Chunk not found');
+        $this->dataChunks->add($dataChunk);
     }
 
-    /**
-     * @return array<int>
-     */
-    public function getDataChunkIndexes(): array
+    public function hasDataChunk(DataChunkIdentifier $identifier): bool
     {
-        return array_keys($this->dataChunks);
+        return $this->dataChunks->contains($identifier);
+    }
+
+    public function getDataChunk(DataChunkIdentifier $identifier): DataChunk
+    {
+        return $this->dataChunks->get($identifier);
+    }
+
+    /** @return Collection<DataChunk> */
+    public function getDataChunks(): Collection
+    {
+        return $this->dataChunks;
     }
 }
