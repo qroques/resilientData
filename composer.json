@@ -1,6 +1,5 @@
 {
     "name": "qroques/resilient-data",
-    "version": "0.1",
     "description": "A package to make data resilient",
     "type": "library",
     "autoload": {
@@ -19,6 +18,7 @@
             "name": "Quentin Roques"
         }
     ],
+    "license": "MIT",
     "require": {
         "php": ">=8.3"
     },
