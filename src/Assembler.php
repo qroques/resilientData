@@ -36,6 +36,7 @@ class Assembler
                 }
             }
         }
+        
         $resilientData = ResilientData::fromBinaryData($data);
 
         if (!$resilientData->getHash()->equals($manifest->resilientDataHash)) {

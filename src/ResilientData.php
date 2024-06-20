@@ -6,9 +6,25 @@ namespace Qroques\ResilientData;
 
 class ResilientData
 {
-    public function __construct(private readonly mixed $data) {}
+    private function __construct(private readonly string $data) {}
 
-    public function getData(): mixed
+    public static function fromFile(string $filename): self
+    {
+        $data = file_get_contents($filename);
+
+        if (false === $data) {
+            throw new \RuntimeException('Could not read the file');
+        }
+
+        return new self($data);
+    }
+
+    public static function fromString(string $data): self
+    {
+        return new self($data);
+    }
+
+    public function getData(): string
     {
         return $this->data;
     }
@@ -20,17 +36,11 @@ class ResilientData
 
     public function getBinaryData(): string
     {
-        $stringData = json_encode($this->data);
-
-        if (false === $stringData) {
-            throw new \RuntimeException('Failed to encode data to JSON: '.json_last_error_msg());
-        }
-
-        return base64_encode($stringData);
+        return base64_encode($this->data);
     }
 
-    public static function fromBinaryData(string $data): self
+    public static function fromBinaryData(string $binaryData): self
     {
-        return new self(json_decode(base64_decode($data)));
+        return new self(base64_decode($binaryData));
     }
 }
