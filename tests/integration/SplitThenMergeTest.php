@@ -17,10 +17,10 @@ use Qroques\ResilientData\SplittingConfiguration;
 #[CoversNothing]
 class SplitThenMergeTest extends TestCase
 {
-    public function testSplitThenMerge()
+    public function testSplitThenMergeTextFile()
     {
         $data = file_get_contents('tests/fixtures/lorem.txt');
-        $resilientData = new ResilientData($data);
+        $resilientData = ResilientData::fromFile('tests/fixtures/lorem.txt');
         $splittingConfiguration = new SplittingConfiguration(7, 3);
         $splitter = new Splitter();
         $fragments = $splitter->split($resilientData, $splittingConfiguration);
@@ -28,5 +28,30 @@ class SplitThenMergeTest extends TestCase
         $assembler = new Assembler();
         $reassembledResilientData = $assembler->assemble($fragments);
         $this->assertEquals($data, $reassembledResilientData->getData());
+    }
+
+    public function testSplitThenMergeImageFile()
+    {
+        $data = file_get_contents('tests/fixtures/image.png');
+        $resilientData = ResilientData::fromFile('tests/fixtures/image.png');
+        $splittingConfiguration = new SplittingConfiguration(7, 3);
+        $splitter = new Splitter();
+        $fragments = $splitter->split($resilientData, $splittingConfiguration);
+
+        $assembler = new Assembler();
+        $reassembledResilientData = $assembler->assemble($fragments);
+        $this->assertEquals($data, $reassembledResilientData->getData());
+    }
+
+    public function testSplitThenMergeText()
+    {
+        $resilientData = ResilientData::fromString('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
+        $splittingConfiguration = new SplittingConfiguration(7, 3);
+        $splitter = new Splitter();
+        $fragments = $splitter->split($resilientData, $splittingConfiguration);
+
+        $assembler = new Assembler();
+        $reassembledResilientData = $assembler->assemble($fragments);
+        $this->assertEquals('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', $reassembledResilientData->getData());
     }
 }

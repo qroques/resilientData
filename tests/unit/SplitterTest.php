@@ -19,7 +19,7 @@ class SplitterTest extends TestCase
     public function testSplit(): void
     {
         $splitter = new Splitter();
-        $resilientData = new ResilientData('12345');
+        $resilientData = ResilientData::fromString('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
         $fragments = $splitter->split($resilientData, new SplittingConfiguration(5, 2));
         $this->assertCount(5, $fragments);
     }
