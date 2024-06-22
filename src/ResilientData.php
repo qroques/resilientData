@@ -12,7 +12,7 @@ class ResilientData
         public readonly ?string $originalName = null
     ) {}
 
-    public static function fromFile(string $filename): self
+    public static function fromFile(string $filename, ?string $originalName = null): self
     {
         $data = file_get_contents($filename);
         $type = mime_content_type($filename);
@@ -25,7 +25,7 @@ class ResilientData
             throw new \RuntimeException('Could not determine the mime type');
         }
 
-        return new self($data, $type, basename($filename));
+        return new self($data, $type, basename($originalName ?? $filename));
     }
 
     public static function fromPlainText(string $data): self
