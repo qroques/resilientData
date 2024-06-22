@@ -6,22 +6,39 @@ namespace Qroques\ResilientData;
 
 class ResilientData
 {
-    private function __construct(private readonly string $data) {}
+    private function __construct(
+        private readonly string $data,
+        public readonly ?string $originalType = null,
+        public readonly ?string $originalName = null
+    ) {}
 
     public static function fromFile(string $filename): self
     {
         $data = file_get_contents($filename);
+        $type = mime_content_type($filename);
 
         if (false === $data) {
             throw new \RuntimeException('Could not read the file');
         }
 
-        return new self($data);
+        if (false === $type) {
+            throw new \RuntimeException('Could not determine the mime type');
+        }
+
+        return new self($data, $type, basename($filename));
     }
 
-    public static function fromString(string $data): self
+    public static function fromPlainText(string $data): self
     {
-        return new self($data);
+        return new self($data, 'text/plain');
+    }
+
+    public static function fromBinaryData(
+        string $binaryData,
+        ?string $originalType = null,
+        ?string $originalName = null
+    ): self {
+        return new self(base64_decode($binaryData), $originalType, $originalName);
     }
 
     public function getData(): string
@@ -37,10 +54,5 @@ class ResilientData
     public function getBinaryData(): string
     {
         return base64_encode($this->data);
-    }
-
-    public static function fromBinaryData(string $binaryData): self
-    {
-        return new self(base64_decode($binaryData));
     }
 }

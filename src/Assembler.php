@@ -36,8 +36,8 @@ class Assembler
                 }
             }
         }
-        
-        $resilientData = ResilientData::fromBinaryData($data);
+
+        $resilientData = ResilientData::fromBinaryData($data, $manifest->originalType, $manifest->originalName);
 
         if (!$resilientData->getHash()->equals($manifest->resilientDataHash)) {
             throw new HashMismatchException($resilientData->getHash(), $manifest->resilientDataHash);
