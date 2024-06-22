@@ -9,7 +9,7 @@ namespace Qroques\ResilientData;
  */
 readonly class Hash implements \Stringable, Comparable
 {
-    private function __construct(public string $hash) {}
+    public function __construct(public string $hash) {}
 
     public function __toString(): string
     {
