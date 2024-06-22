@@ -15,7 +15,7 @@ class Splitter
     ): iterable {
         /** @var Collection<Fragment> */
         $fragments = new Collection();
-        $manifest = new Manifest($resilientData->getHash(), $splittingConfiguration);
+        $manifest = new Manifest($resilientData->getHash(), $splittingConfiguration, $resilientData->originalType, $resilientData->originalName);
         $chunkSize = (int) ceil(strlen($resilientData->getBinaryData()) / $splittingConfiguration->getNumberOfChunks());
 
         if ($chunkSize <= 1) {

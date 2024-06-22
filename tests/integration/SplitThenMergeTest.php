@@ -45,7 +45,7 @@ class SplitThenMergeTest extends TestCase
 
     public function testSplitThenMergeText()
     {
-        $resilientData = ResilientData::fromString('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
+        $resilientData = ResilientData::fromPlainText('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
         $splittingConfiguration = new SplittingConfiguration(7, 3);
         $splitter = new Splitter();
         $fragments = $splitter->split($resilientData, $splittingConfiguration);
