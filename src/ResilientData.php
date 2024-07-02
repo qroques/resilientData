@@ -12,8 +12,10 @@ class ResilientData
         public readonly ?string $originalName = null
     ) {}
 
-    public static function fromFile(string $filename, ?string $originalName = null): self
-    {
+    public static function fromFile(
+        string $filename,
+        ?string $originalName = null
+    ): self {
         $data = file_get_contents($filename);
         $type = mime_content_type($filename);
 

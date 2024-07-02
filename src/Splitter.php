@@ -7,14 +7,12 @@ namespace Qroques\ResilientData;
 class Splitter
 {
     /**
-     * @return array<Fragment>
+     * @return \Generator<Fragment>
      */
     public function split(
         ResilientData $resilientData,
         SplittingConfiguration $splittingConfiguration
-    ): iterable {
-        /** @var Collection<Fragment> */
-        $fragments = new Collection();
+    ): \Generator {
         $manifest = new Manifest($resilientData->getHash(), $splittingConfiguration, $resilientData->originalType, $resilientData->originalName);
         $chunkSize = (int) ceil(strlen($resilientData->getBinaryData()) / $splittingConfiguration->getNumberOfChunks());
 
@@ -23,20 +21,23 @@ class Splitter
         }
 
         $dataChunkIdentifiers = $splittingConfiguration->getDataChunkIdentifiers();
-        $data = str_split($resilientData->getBinaryData(), $chunkSize);
+        $data = mb_str_split($resilientData->getBinaryData(), $chunkSize);
 
         for ($index = 0; $index < $splittingConfiguration->numberOfFragments; ++$index) {
-            $fragments->add(new Fragment(new FragmentIdentifier($index), $manifest));
+            $fragment = new Fragment(new FragmentIdentifier($index), $manifest);
+
+            array_map(
+                function ($index, $chunk) use ($fragment, $dataChunkIdentifiers) {
+                    if (\in_array($fragment->getIdentifier(), $dataChunkIdentifiers[$index]->getRelatedFragmentIdentifiers())) {
+                        $dataChunk = new DataChunk($dataChunkIdentifiers[$index], $chunk);
+                        $fragment->addDataChunk($dataChunk);
+                    }
+                },
+                array_keys($data),
+                array_values($data)
+            );
+
+            yield $fragment;
         }
-
-        foreach ($data as $index => $chunk) {
-            $dataChunk = new DataChunk($dataChunkIdentifiers[$index], $chunk);
-
-            foreach ($dataChunk->identifier->getRelatedFragmentIdentifiers() as $fragmentIdentifier) {
-                $fragments->get($fragmentIdentifier)->addDataChunk($dataChunk);
-            }
-        }
-
-        return iterator_to_array($fragments);
     }
 }

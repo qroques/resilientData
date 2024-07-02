@@ -20,7 +20,8 @@ class SplitterTest extends TestCase
     {
         $splitter = new Splitter();
         $resilientData = ResilientData::fromPlainText('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
-        $fragments = $splitter->split($resilientData, new SplittingConfiguration(5, 2));
+        $fragments = iterator_to_array($splitter->split($resilientData, new SplittingConfiguration(5, 2)));
+
         $this->assertCount(5, $fragments);
     }
 }
