@@ -23,7 +23,7 @@ class SplitThenMergeTest extends TestCase
         $resilientData = ResilientData::fromFile('tests/fixtures/lorem.txt');
         $splittingConfiguration = new SplittingConfiguration(7, 3);
         $splitter = new Splitter();
-        $fragments = $splitter->split($resilientData, $splittingConfiguration);
+        $fragments = iterator_to_array($splitter->split($resilientData, $splittingConfiguration));
 
         $assembler = new Assembler();
         $reassembledResilientData = $assembler->assemble($fragments);
@@ -36,7 +36,7 @@ class SplitThenMergeTest extends TestCase
         $resilientData = ResilientData::fromFile('tests/fixtures/image.png');
         $splittingConfiguration = new SplittingConfiguration(7, 3);
         $splitter = new Splitter();
-        $fragments = $splitter->split($resilientData, $splittingConfiguration);
+        $fragments = iterator_to_array($splitter->split($resilientData, $splittingConfiguration));
 
         $assembler = new Assembler();
         $reassembledResilientData = $assembler->assemble($fragments);
@@ -48,7 +48,7 @@ class SplitThenMergeTest extends TestCase
         $resilientData = ResilientData::fromPlainText('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
         $splittingConfiguration = new SplittingConfiguration(7, 3);
         $splitter = new Splitter();
-        $fragments = $splitter->split($resilientData, $splittingConfiguration);
+        $fragments = iterator_to_array($splitter->split($resilientData, $splittingConfiguration));
 
         $assembler = new Assembler();
         $reassembledResilientData = $assembler->assemble($fragments);
