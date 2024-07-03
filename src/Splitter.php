@@ -26,16 +26,12 @@ class Splitter
         for ($index = 0; $index < $splittingConfiguration->numberOfFragments; ++$index) {
             $fragment = new Fragment(new FragmentIdentifier($index), $manifest);
 
-            array_map(
-                function ($index, $chunk) use ($fragment, $dataChunkIdentifiers) {
-                    if (\in_array($fragment->getIdentifier(), $dataChunkIdentifiers[$index]->getRelatedFragmentIdentifiers())) {
-                        $dataChunk = new DataChunk($dataChunkIdentifiers[$index], $chunk);
-                        $fragment->addDataChunk($dataChunk);
-                    }
-                },
-                array_keys($data),
-                array_values($data)
-            );
+            foreach ($data as $chunkIndex => $chunk) {
+                if (\in_array($fragment->getIdentifier(), $dataChunkIdentifiers[$chunkIndex]->getRelatedFragmentIdentifiers())) {
+                    $dataChunk = new DataChunk($dataChunkIdentifiers[$chunkIndex], $chunk);
+                    $fragment->addDataChunk($dataChunk);
+                }
+            }
 
             yield $fragment;
         }
